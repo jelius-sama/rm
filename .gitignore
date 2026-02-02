@@ -1,0 +1,24 @@
+# Ignore everything
+*
+
+# But allow directories (so Git can recurse into them)
+!*/
+
+# Allow C source and header files
+!*.c
+!*.h
+
+# Allow Markdown files
+!*.md
+
+# Allow `man` pages
+!*.1
+
+# Allow shell scripts
+!*.sh
+
+# Allow Makefile
+!Makefile
+
+# Allow .gitignore file itself
+!.gitignore
