@@ -73,7 +73,7 @@ __FBSDID("$FreeBSD$");
 #endif
 
 static int dflag, eval, fflag, iflag, Pflag, vflag, Wflag, stdin_ok;
-static int rflag, Iflag, xflag;
+static int rflag, Iflag, xflag, tflag;
 static uid_t uid;
 static volatile sig_atomic_t info;
 
@@ -83,6 +83,9 @@ static int yes_or_no(void);
 static int check2(char **);
 static void checkdot(char **);
 static void checkslash(char **);
+static void trash_path(char **argv);
+static void trash_tree(char **argv);
+static void trash_file(char **argv);
 static void rm_file(char **);
 static void rm_tree(char **);
 static void siginfo(int __unused);
@@ -127,8 +130,9 @@ int main(int argc, char *argv[]) {
         exit(eval);
     }
 
-    Pflag = rflag = xflag = 0;
-    while ((ch = getopt(argc, argv, "dfiIPRrvWx")) != -1)
+    // This code was present in the original code but isn't this redundant?
+    // Pflag = rflag = xflag = 0;
+    while ((ch = getopt(argc, argv, "dfiIPRrvWxt")) != -1)
         switch (ch) {
         case 'd':
             dflag = 1;
@@ -164,6 +168,9 @@ int main(int argc, char *argv[]) {
         case 'x':
             xflag = 1;
             break;
+        case 't':
+            tflag = 1;
+            break;
         default:
             usage();
         }
@@ -187,12 +194,33 @@ int main(int argc, char *argv[]) {
             if (check2(argv) == 0)
                 exit(1);
         }
-        if (rflag)
+        if (tflag)
+            trash_path(argv);
+        else if (rflag)
             rm_tree(argv);
         else
             rm_file(argv);
     }
 
+    exit(eval);
+}
+
+static void trash_path(char **argv) {
+    if (rflag)
+        trash_tree(argv);
+    else
+        trash_file(argv);
+}
+
+static void trash_tree(char **argv) {
+    (void)argv;
+    printf("TODO: Implement trash_tree()\n");
+    exit(eval);
+}
+
+static void trash_file(char **argv) {
+    (void)argv;
+    printf("TODO: Implement trash_file()\n");
     exit(eval);
 }
 
@@ -629,9 +657,8 @@ static void checkdot(char **argv) {
 }
 
 static void usage(void) {
-
     (void)fprintf(stderr, "%s\n%s\n",
-                  "usage: rm [-f | -i] [-dIPRrvWx] file ...",
+                  "usage: rm [-f | -i] [-dIPRrvWxt] file ...",
                   "       unlink [--] file");
     exit(EX_USAGE);
 }
