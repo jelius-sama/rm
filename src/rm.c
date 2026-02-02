@@ -60,6 +60,8 @@ __FBSDID("$FreeBSD$");
 #include <sysexits.h>
 #include <unistd.h>
 
+#include "fs/fs.h"
+
 #ifdef __APPLE__
 #include "get_compat.h"
 #include <removefile.h>
@@ -83,9 +85,6 @@ static int yes_or_no(void);
 static int check2(char **);
 static void checkdot(char **);
 static void checkslash(char **);
-static void trash_path(char **argv);
-static void trash_tree(char **argv);
-static void trash_file(char **argv);
 static void rm_file(char **);
 static void rm_tree(char **);
 static void siginfo(int __unused);
@@ -194,33 +193,29 @@ int main(int argc, char *argv[]) {
             if (check2(argv) == 0)
                 exit(1);
         }
-        if (tflag)
-            trash_path(argv);
-        else if (rflag)
+
+        if (iflag && tflag) {
+            printf("Using interactive mode with trash mode is not planned to "
+                   "be implemented.\nUse the non-interactive mode to use the "
+                   "trash mode.\n\n");
+            usage();
+            exit(eval);
+        }
+
+        if (tflag) {
+            Metadata m = {
+                .rflag = rflag,
+                .fflag = fflag,
+                .eval = eval,
+            };
+            trash_path(argv, &m);
+        } else if (rflag) {
             rm_tree(argv);
-        else
+        } else {
             rm_file(argv);
+        }
     }
 
-    exit(eval);
-}
-
-static void trash_path(char **argv) {
-    if (rflag)
-        trash_tree(argv);
-    else
-        trash_file(argv);
-}
-
-static void trash_tree(char **argv) {
-    (void)argv;
-    printf("TODO: Implement trash_tree()\n");
-    exit(eval);
-}
-
-static void trash_file(char **argv) {
-    (void)argv;
-    printf("TODO: Implement trash_file()\n");
     exit(eval);
 }
 
@@ -658,7 +653,7 @@ static void checkdot(char **argv) {
 
 static void usage(void) {
     (void)fprintf(stderr, "%s\n%s\n",
-                  "usage: rm [-f | -i] [-dIPRrvWxt] file ...",
+                  "usage: rm [-ft | -i] [-dIPRrvWx] file ...",
                   "       unlink [--] file");
     exit(EX_USAGE);
 }
