@@ -4,11 +4,13 @@
 typedef struct {
     int rflag;
     int fflag;
+    int wflag;
+    int dflag;
     int eval;
 } Metadata;
 
 void trash_path(char **, Metadata *);
-void trash_tree(char **, int);
-void trash_file(char **, int);
+void trash_tree(char **, Metadata *);
+void trash_file(char **, Metadata *);
 
 #endif // FS_H

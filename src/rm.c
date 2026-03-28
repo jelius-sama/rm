@@ -60,7 +60,7 @@ __FBSDID("$FreeBSD$");
 #include <sysexits.h>
 #include <unistd.h>
 
-#include "fs/fs.h"
+#include "trash/trash.h"
 
 #ifdef __APPLE__
 #include "get_compat.h"
@@ -206,6 +206,8 @@ int main(int argc, char *argv[]) {
             Metadata m = {
                 .rflag = rflag,
                 .fflag = fflag,
+                .wflag = Wflag,
+                .dflag = dflag,
                 .eval = eval,
             };
             trash_path(argv, &m);

@@ -6,6 +6,7 @@
 
 # Allow C source and header files
 !*.c
+!*.swift
 !*.h
 
 # Allow Markdown files
