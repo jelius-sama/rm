@@ -12,7 +12,7 @@ all: rm
 
 rm: $(SOURCES) bin/bridge.o
 	@mkdir -p $(BIN)
-	@$(CC) -Wall -Wextra -O2 -L /usr/lib/swift -framework Foundation -o $(BIN)/$(PROGRAM) $(SOURCES)
+	$(CC) -Wall -Wextra -O2 -L /usr/lib/swift -framework Foundation -o $(BIN)/$(PROGRAM) $(SOURCES)
 	@rm $(BIN)/bridge.o
 
 bin/bridge.o:
