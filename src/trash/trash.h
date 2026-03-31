@@ -12,5 +12,6 @@ typedef struct {
 void trash_path(char **, Metadata *);
 void trash_tree(char **, Metadata *);
 void trash_file(char **, Metadata *);
+char *v_realpath(const char *, char *);
 
 #endif // FS_H

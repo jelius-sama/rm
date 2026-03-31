@@ -4,6 +4,7 @@ PROGRAM := rm
 SRC := ./src
 SOURCES := $(SRC)/rm.c \
 		   $(SRC)/trash/trash.c \
+		   $(SRC)/trash/path.c \
 		   $(BIN)/bridge.o
 
 .PHONY: all rm
